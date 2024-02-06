@@ -3,51 +3,139 @@ import React, { useEffect, useContext } from 'react';
 import {useState} from 'react';
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableOpacity } from 'react-native';
 import LayoutsContext from '../../context/layoutsContext';
-import { getAllGames } from '../api/gamesRequest';
+import { getAllGames, getUserDataRequest } from '../api/gamesRequest';
 import GameContext from '../../context/gamesContext';
+import AuthContext from '../../context/authContext';
+import SearchGames from './searchGames';
 
 export const Home = () => {
-  
-  const { gameInfo, setGameInfo } = useContext(LayoutsContext);
-  const { allGames, setAllGames, gameDetailState, gameDetailsContext, getGamesByCategoriesContext, addGameToLikedGamesContext } = useContext(GameContext);
+  const {userData, session, setUserData} = useContext(AuthContext);
+  const { gameInfo, setGameInfo, setSearch } = useContext(LayoutsContext);
+  const { allGames, setAllGames, setSearchingGames, gameDetailState, gameDetailsContext, getGamesByCategoriesContext, addGameToLikedGamesContext, addToCartContext } = useContext(GameContext);
   const [showReq, setShowReq] = useState(false);
   const [showDesc, setShowDesc] = useState(false);
-
- useEffect(() => {
-   const res = async () => {
+  const [lastGame, setLastGame] = useState(20);
+  const [firstGame, setFirstGame] = useState(0);
+  const [pageCount, setPageCount] = useState([1, 2, 3]);
+  const [pageFlag, setPageFlag] = useState(false);
+  
+  useEffect(() => {
+    const res = async () => {
       const response = await getAllGames();
       setAllGames(response);
+      setSearchingGames(response);
+      //getSessionContext();
+      const res = await getUserDataRequest("65b844cbf0717a7345825c1d");
+      setUserData(res.data);
   } 
   res();
  }, []);
 
- const gameCategory = async (category) => {
-    await getGamesByCategoriesContext(category);
+ console.log("userData: ", userData);
+
+ const firstPage = async () => {
+    setPageCount([1, 2, 3]);
+    setLastGame(20);
+    setFirstGame(0);
  }
-   //console.log("yo:  ", allGames);
+
+ const lastPage = async () => {
+    setPageCount([18, 19, 20]);
+    setLastGame(allGames.length);
+    await setFirstGame(allGames.length - 20);
+ }
+
+ const goBack = () => {
+  const updatePages = pageCount.map(pageCount => pageCount - 1);
+  if(updatePages[0] <= 1){
+    setPageCount([1, 2, 3]);
+  }else{
+    setPageCount(updatePages);
+  }
+  if(pageFlag === true){
+    setPageFlag(false);
+    setFirstGame(firstGame - 20);
+    setLastGame(lastGame - 20);
+  }else{
+    setFirstGame(20 * updatePages[0] - 20);
+    setLastGame(20 * updatePages[0]);
+ }
+ }
+
+ const goNext = () => {
+  const updatePages = pageCount.map(pageCount => pageCount + 1);
+  if(updatePages[2] >= 20){
+    setPageCount([18, 19, 20]);
+  }else{
+    setPageCount(updatePages);
+  }
+  if(pageFlag === false){
+    console.log("eereraer");
+    setPageFlag(true);
+    setFirstGame(firstGame + 20);
+    setLastGame(lastGame + 20);
+  }else{
+    setFirstGame(20 * updatePages[0]);
+    setLastGame(20 * updatePages[0] + 20);
+  }
+ }
+
+
+ const goToPage = (c) => {
+   
+   setPageCount([c, c + 1, c + 2]);
+   setFirstGame(c * 20 - 20);
+   setLastGame(c * 20);
+
+   if(lastGame >= allGames.length || pageCount >= 20){
+      setFirstGame(allGames.length - 20);
+      setLastGame(allGames.length);
+      setPageCount([18, 19, 20]);
+    }
+  }
+  
+  console.log("first: ", firstGame, " ", "last: ", lastGame);
+  const gameCategory = async (category) => {
+      await getGamesByCategoriesContext(category);
+  }
+
   const gameInfoFunc = (gameId) => {
     gameDetailsContext(gameId);
     setGameInfo(true);
+    setSearch('');
   }
 
-  const addGameToLikedGames = (gameId, title, thumbnail, gamePrice, gameDiscount) => {
+  const addGameToLikedGames = (gameId, title, thumbnail, release_date, gamePrice, gameDiscount) => {
+    
     const favoriteGameData = {
-      id : "654049c0eb8fabccbd1eb065",
+      id : "65b844cbf0717a7345825c1d",/*userData[0]?._id*/
       gameId: gameId,
       title: title,
       thumbnail: thumbnail,
+      releaseDate: release_date,
       gamePrice: gamePrice,
       gameDiscount: gameDiscount
     }
     addGameToLikedGamesContext(favoriteGameData);
   }
 
-  const addGameToCart = () => {
-    console.log("save game in cart");
+  const addGameToCart = ( gameId, title, thumbnail, release_date, gamePrice, gameDiscount) => {
+    console.log(gameId);
+    const cartGameData = {
+      sessionId: "65b844cbf0717a7345825c1d" /*userData[0]?._id*/,
+      gameId: gameId,
+      title: title,
+      thumbnail: thumbnail,
+      releaseDate: release_date,
+      gamePrice: gamePrice,
+      gameDiscount: gameDiscount
+    }
+    addToCartContext(cartGameData);
   }
 
   return (
     <View>
+    <SearchGames/>
     <View style={styles.gamesCategories}>
       <TouchableOpacity onPress={() => gameCategory("shooter")} style={styles.gameCategoriesButtons}><Text style={{color:'white', textAlign:'center'}}>Shooters</Text></TouchableOpacity>
       <TouchableOpacity onPress={() => gameCategory("mmorpg")} style={styles.gameCategoriesButtons}><Text style={{color:'white', textAlign:'center'}}>MMORPG</Text></TouchableOpacity>
@@ -74,6 +162,11 @@ export const Home = () => {
       
         {gameDetailState.map((details) => <View key={details.id} style={styles.gameInfoContainer}>
           <Image style={styles.gameImagePort} loadingIndicatorSource={require('../../assets/loaders/loaderA.gif')} source={{uri: details.thumbnail}}></Image>
+         <View style={styles.screenshotsView}>
+          {details.screenshots.map((screens) => <View key={screens.id}>
+          <Image style={styles.screenshots} loadingIndicatorSource={require('../../assets/loaders/loaderA.gif')} source={{uri: screens.image}}></Image>
+            </View>)}
+         </View>
           <Text style={[styles.textPrimaryColor, styles.gameTitlesInfo]}>{details.title}</Text>
           <View style={styles.priceContainerInfo}>
             <Text style={[styles.textSecundaryColor, styles.priceText]}>Price:</Text><Text style={styles.priceNumber}>{gamePrice = Math.floor(Math.random() * 70) + 1}$</Text>
@@ -109,8 +202,8 @@ export const Home = () => {
             </View>}
           </View>
           <View style={styles.likeAddCart}>
-              <TouchableOpacity onPress={() => addGameToLikedGames(details.id, details.title, details.thumbnail, gamePrice, gameDiscount)}><Image source={require('../../assets/gameInfoIcons/like.png')}></Image></TouchableOpacity>
-              <TouchableHighlight onPress={() => addGameToCart()}>
+              <TouchableOpacity onPress={() => addGameToLikedGames(details.id, details.title, details.thumbnail, details.release_date, gamePrice, gameDiscount)}><Image source={require('../../assets/gameInfoIcons/like.png')}></Image></TouchableOpacity>
+              <TouchableHighlight onPress={() => addGameToCart(details.id, details.title, details.thumbnail, details.release_date, gamePrice, gameDiscount)}>
                 <View style={styles.gameToCart}>
                   <Text style={[styles.textPrimaryColor, styles.gameToCartText]}>Add to cart</Text>
                 </View>
@@ -143,7 +236,7 @@ export const Home = () => {
         <View style={styles.gamesContainer}>
           <Text style={styles.gameCategoryTitle}>Nuevos productos</Text>
           <View style={styles.gamesList}>
-          {allGames.slice(0, 20).map((games) => <TouchableHighlight key={games.id} onPress={() => gameInfoFunc(games.id)}>
+          {allGames.slice(firstGame, lastGame).map((games) => <TouchableHighlight key={games.id} onPress={() => gameInfoFunc(games.id)}>
               <View style={styles.game}>
                 <Image style={styles.gameImg} source={{uri: games.thumbnail}} />
                 <Text style={[styles.gameTitles]}>{games.title.length < 14 ? games.title : `${games.title.substring(0,12)}...`}</Text>
@@ -155,13 +248,23 @@ export const Home = () => {
             </TouchableHighlight>)}
           </View>
         </View>
+        <View style={styles.pagesView}>
+          <TouchableHighlight onPress={() => firstPage()}><Image source={require('../../assets/double-back-arrow.png')} /></TouchableHighlight>
+          <TouchableHighlight onPress={() => goBack()}><Image source={require('../../assets/back-arrow.png')}></Image></TouchableHighlight>
+          {pageCount.map((c, i) => <TouchableHighlight key={i} onPress={() => goToPage(c)}><Text style={[styles.textPrimaryColor, styles.pageFontSize]}>{c}</Text></TouchableHighlight>)}
+          <TouchableHighlight onPress={() => goNext()}><Image source={require('../../assets/arrow-next.png')}></Image></TouchableHighlight>
+          <TouchableHighlight onPress={() => lastPage()}><Image source={require('../../assets/double-next-arrow.png')} /></TouchableHighlight>
+        </View>
       </View>
     }
     </View>
-  )
+  ) 
 }
 
 const styles = StyleSheet.create({
+    pageFontSize:{
+      fontSize:24
+    },
     textPrimaryColor:{
       color:'#ffffff',
     },
@@ -188,7 +291,8 @@ const styles = StyleSheet.create({
     },
     gameInfoContainer:{
       flex:1,
-      width:400,
+      width:405,
+      margin:'auto',
       backgroundColor:'#131313'
     },
     portadaImg: {
@@ -313,6 +417,28 @@ const styles = StyleSheet.create({
       marginLeft:15,
       fontSize:22,
       color:'#f4b638'
+    },
+    screenshotsView:{
+      flexDirection:'row',
+      justifyContent:'center',
+      alignItems:'center',
+      width:'100%',
+      height:130,
+      marginTop: 5,
+      backgroundColor:'#131313'
+    },
+    screenshots:{
+      width:125,
+      height:130,
+      margin:5
+    },
+    pagesView:{
+      flex: 1, 
+      alignSelf:'center',
+      flexDirection:'row',
+      width:300,
+      height:70,
+      alignItems:'center',
+      justifyContent:'space-between',
     }
-    
 });

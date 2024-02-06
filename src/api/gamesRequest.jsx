@@ -1,4 +1,6 @@
 import axios from 'axios';
+
+export const getUserDataRequest = async (userId) => await axios.get(`http://192.168.100.10:4000/userData/${userId}`)
  
  export const getAllGames = async () => {
     const getAllGames = {
@@ -58,5 +60,12 @@ export const gameDetails = async (gameId) => {
   }
 }
   
-export const favoritesRequest = async (likedGame) => await axios.post('/addFavorite', likedGame)
+export const favoritesRequest = async (likedGame) => await axios.post('http://192.168.100.10:4000/addFavorite', likedGame);
   
+export const deleteFavGameRequest = async (sessionId, gameId) => await axios.delete(`http://192.168.100.10:4000/deleteFavorite/${sessionId}/${gameId}`);
+
+export const addToCartRequest = async (cartGameData) => axios.post(`http://192.168.100.10:4000/addToCart`, cartGameData);
+
+export const deleteAllRequest = async () => axios.delete('http://192.168.100.10:4000/deleteAll');
+
+export const purchaseAllRequest = async (purchaseObj) => axios.put(`http://192.168.100.10:4000/purchase/${purchaseObj.userId}/${purchaseObj.cardNumber}/${purchaseObj.securityNumber}/${purchaseObj.purchaseFlag}/${purchaseObj.totalPurchase}`);

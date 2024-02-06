@@ -38,7 +38,86 @@ export const UserInfo = () => {
         }
 
     return(
+
         <View style={styles.userInfoContainer}>
+            <>
+            <View style={styles.userProfile}>
+                <View>
+                    <Image style={[styles.userProfileImg, styles.mLeft]} source={require('../../assets/userInfoIcons/userIcon.jpg')}></Image>
+                </View>
+                <View>
+                    <Text style={[styles.welcome, styles.mLeft]}>BIENVENIDO</Text>
+                    <Text style={[styles.nameUser, styles.mLeft]}>Luis Salvador Enrique Sosa</Text>
+                    <Text style={[styles.alias, styles.mLeft]}>LuigiSal254</Text>
+                </View>
+            </View>
+            <View style={styles.userProfileRows}>
+                <Text style={[styles.fontStyleUser, styles.mLeft]}>Mi cuenta</Text>
+            </View>
+            <View style={[styles.userProfileRows]}>
+                <Image style={styles.mLeft} source={require('../../assets/userInfoIcons/happiness.png')}/>
+                <View>
+                    <Text style={[styles.fontStyleUser, styles.mLeft]}>Change name and lastname</Text>
+                    <Text style={[styles.secondFontUser, styles.mLeft]}>Change the name of your acount</Text>
+                </View>
+            </View>
+            <View style={[styles.userProfileRows]}>
+                <Image style={styles.mLeft} source={require('../../assets/userInfoIcons/arroba.png')}/>
+                <View>
+                    <Text style={[styles.fontStyleUser, styles.mLeft]}>Change email</Text>
+                    <Text style={[styles.secondFontUser, styles.mLeft]}>Change the email of your acount</Text>
+                </View>
+            </View>
+            <View style={[styles.userProfileRows]}>
+                <Image style={styles.mLeft} source={require('../../assets/userInfoIcons/driver-license.png')}/>
+                <View>
+                    <Text style={[styles.fontStyleUser, styles.mLeft]}>Change the username</Text>
+                    <Text style={[styles.secondFontUser, styles.mLeft]}>Change the username of your acount</Text>
+                </View>
+            </View>
+            <View style={[styles.userProfileRows]}>
+                <Image style={styles.mLeft} source={require('../../assets/userInfoIcons/key.png')}/>
+                <View>
+                    <Text style={[styles.fontStyleUser, styles.mLeft]}>Change password</Text>
+                    <Text style={[styles.secondFontUser, styles.mLeft]}>Change the password of your count</Text>
+                </View>
+            </View>
+            <View style={[styles.userProfileRows]}>
+                <Image style={styles.mLeft} source={require('../../assets/userInfoIcons/shopping.png')}/>
+                <View>
+                    <Text style={[styles.fontStyleUser, styles.mLeft]}>Check the games</Text>
+                    <Text style={[styles.secondFontUser, styles.mLeft]}>Check the games in your acount</Text>
+                </View>
+            </View>
+            </>
+            </View>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       /* <View style={styles.userInfoContainer}>
         {userExist === false && registerUser === false ?
             <>
             <View style={styles.userProfile}>
@@ -95,7 +174,7 @@ export const UserInfo = () => {
             {userExist ? <View style={styles.userForm}>
             <Text style={[styles.textPrimaryColor, styles.formTitle]}>Login</Text>
             <TextInput
-            style={styles.textsInputs}
+                style={styles.textsInputs}
                 placeholder="Mail"
                 value={formData.email}
                 onChangeText={(text) => handleInputChange('email', text)}
@@ -152,7 +231,7 @@ export const UserInfo = () => {
         </>
         }
         
-        </View>
+        </View>*/
     )
 }
 
@@ -224,11 +303,11 @@ const styles = StyleSheet.create({
     },
     userForm:{
         flex:1,
-        marginTop:20,
         paddingVertical:10,
         paddingHorizontal:10,
         alignItems:'center',
         justifyContent:'center',
+        marginTop:80
     },
     formTitle:{
         fontSize:27
