@@ -1,0 +1,50 @@
+{
+  "userData": [
+    {
+      "userId": "",
+      "email": "",
+      "username": "",
+      "password": ""
+    }
+  ],
+  "games": [
+    {
+      "obtained": [
+        {
+          "gameId": "",
+          "title": "",
+          "thumbnail": "",
+          "genre": "",
+          "releaseDate": "",
+          "screenShots": [
+            {
+              "shotOne": "",
+              "shotTwo": "",
+              "shotThree": "",
+              "shotFour": ""
+            }
+          ]
+        }
+      ],
+      "onCartorFavorite": [
+        {
+          "favorite": "",
+          "gameId": "",
+          "title": "",
+          "thumbnail": "",
+          "price": "",
+          "discount": "",
+          "total": ""
+        }
+      ]
+    },
+    {
+      "id": "654049c0eb8fabccbd1eb065",
+      "gameId": 540,
+      "title": "Overwatch 2",
+      "thumbnail": "https://www.freetogame.com/g/540/thumbnail.jpg",
+      "gamePrice": 56,
+      "gameDiscount": 81
+    }
+  ]
+}

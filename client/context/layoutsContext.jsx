@@ -10,7 +10,8 @@ export const LayoutsContextProvider = ({children}) => {
     const [changeCartImg, setChangeCartImg] = useState(false);
     const [changeUserImg, setChangeUserImg] = useState(false);
     const [gameInfo, setGameInfo] = useState(false);
-
+    const [gameLike, setGameLike] = useState(false);
+    const [search, setSearch] = useState('');
     return(
         <LayoutsContext.Provider value={{
             userExist,
@@ -26,7 +27,11 @@ export const LayoutsContextProvider = ({children}) => {
             changeUserImg,
             setChangeUserImg,
             gameInfo, 
-            setGameInfo
+            setGameInfo,
+            gameLike,
+            setGameLike,
+            search, 
+            setSearch
         }}>{children}</LayoutsContext.Provider>
     )
 }

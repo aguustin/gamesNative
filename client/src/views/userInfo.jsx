@@ -1,23 +1,30 @@
 import { useContext, useState } from "react";
 import { View, Text, Image, StyleSheet, TextInput, TouchableHighlight } from "react-native"
 import LayoutsContext from "../../context/layoutsContext";
+import AuthContext from "../../context/authContext";
 
 export const UserInfo = () => {
 
     const {userExist, setUserExist, registerUser, setRegisterUser} = useContext(LayoutsContext);
+    const {signInContext, loginContext} = useContext(AuthContext);
   
     const [formData, setFormData] = useState({
+          email:'',
           username: '',
           password: '',
+          repeatPassword:''
         });
       
         const handleInputChange = (fieldName, value) => {
           setFormData({ ...formData, [fieldName]: value });
         };
       
-        const handleSubmit = () => {
-          // Handle form submission logic here
-          console.log('Form Data:', formData);
+        const handleSignIn = () => {
+            signInContext(formData);
+        };
+
+        const handleLogin = () => {
+            loginContext(formData);
         };
 
         const registerForm = () => {
@@ -31,7 +38,86 @@ export const UserInfo = () => {
         }
 
     return(
+
         <View style={styles.userInfoContainer}>
+            <>
+            <View style={styles.userProfile}>
+                <View>
+                    <Image style={[styles.userProfileImg, styles.mLeft]} source={require('../../assets/userInfoIcons/userIcon.jpg')}></Image>
+                </View>
+                <View>
+                    <Text style={[styles.welcome, styles.mLeft]}>BIENVENIDO</Text>
+                    <Text style={[styles.nameUser, styles.mLeft]}>Luis Salvador Enrique Sosa</Text>
+                    <Text style={[styles.alias, styles.mLeft]}>LuigiSal254</Text>
+                </View>
+            </View>
+            <View style={styles.userProfileRows}>
+                <Text style={[styles.fontStyleUser, styles.mLeft]}>Mi cuenta</Text>
+            </View>
+            <View style={[styles.userProfileRows]}>
+                <Image style={styles.mLeft} source={require('../../assets/userInfoIcons/happiness.png')}/>
+                <View>
+                    <Text style={[styles.fontStyleUser, styles.mLeft]}>Change name and lastname</Text>
+                    <Text style={[styles.secondFontUser, styles.mLeft]}>Change the name of your acount</Text>
+                </View>
+            </View>
+            <View style={[styles.userProfileRows]}>
+                <Image style={styles.mLeft} source={require('../../assets/userInfoIcons/arroba.png')}/>
+                <View>
+                    <Text style={[styles.fontStyleUser, styles.mLeft]}>Change email</Text>
+                    <Text style={[styles.secondFontUser, styles.mLeft]}>Change the email of your acount</Text>
+                </View>
+            </View>
+            <View style={[styles.userProfileRows]}>
+                <Image style={styles.mLeft} source={require('../../assets/userInfoIcons/driver-license.png')}/>
+                <View>
+                    <Text style={[styles.fontStyleUser, styles.mLeft]}>Change the username</Text>
+                    <Text style={[styles.secondFontUser, styles.mLeft]}>Change the username of your acount</Text>
+                </View>
+            </View>
+            <View style={[styles.userProfileRows]}>
+                <Image style={styles.mLeft} source={require('../../assets/userInfoIcons/key.png')}/>
+                <View>
+                    <Text style={[styles.fontStyleUser, styles.mLeft]}>Change password</Text>
+                    <Text style={[styles.secondFontUser, styles.mLeft]}>Change the password of your count</Text>
+                </View>
+            </View>
+            <View style={[styles.userProfileRows]}>
+                <Image style={styles.mLeft} source={require('../../assets/userInfoIcons/shopping.png')}/>
+                <View>
+                    <Text style={[styles.fontStyleUser, styles.mLeft]}>Check the games</Text>
+                    <Text style={[styles.secondFontUser, styles.mLeft]}>Check the games in your acount</Text>
+                </View>
+            </View>
+            </>
+            </View>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       /* <View style={styles.userInfoContainer}>
         {userExist === false && registerUser === false ?
             <>
             <View style={styles.userProfile}>
@@ -86,12 +172,12 @@ export const UserInfo = () => {
         :
         <>
             {userExist ? <View style={styles.userForm}>
-            <Text style={[styles.textPrimaryColor, styles.formTitle]}>Sign In</Text>
+            <Text style={[styles.textPrimaryColor, styles.formTitle]}>Login</Text>
             <TextInput
-            style={styles.textsInputs}
-                placeholder="Username"
-                value={formData.username}
-                onChangeText={(text) => handleInputChange('username', text)}
+                style={styles.textsInputs}
+                placeholder="Mail"
+                value={formData.email}
+                onChangeText={(text) => handleInputChange('email', text)}
                 placeholderTextColor="#ffffff">
             </TextInput>
             <TextInput
@@ -102,12 +188,12 @@ export const UserInfo = () => {
             onChangeText={(text) => handleInputChange('password', text)}
             placeholderTextColor="#ffffff">
             </TextInput>
-            <TouchableHighlight style={styles.enter} onPress={() => handleSubmit}><Text style={styles.enterText}>Enter</Text></TouchableHighlight>
-            <TouchableHighlight onPress={() => registerForm()}><Text style={styles.textThirdColorMtop}>Don't have an account? Register here</Text></TouchableHighlight>
+            <TouchableHighlight style={styles.enter} onPress={() => handleLogin()}><Text style={styles.enterText}>Enter</Text></TouchableHighlight>
+            <TouchableHighlight onPress={() => registerForm()}><Text style={styles.textThirdColorMtop}>Don't have an account? Sign in here</Text></TouchableHighlight>
         </View>
         :
         <View style={styles.userForm}>
-            <Text style={[styles.textPrimaryColor, styles.formTitle]}>Register</Text>
+            <Text style={[styles.textPrimaryColor, styles.formTitle]}>Sign in</Text>
             <TextInput
             style={styles.textsInputs}
                 placeholder="Email"
@@ -138,14 +224,14 @@ export const UserInfo = () => {
             onChangeText={(text) => handleInputChange('repeatPassword', text)}
             placeholderTextColor="#ffffff">
             </TextInput>
-            <TouchableHighlight style={styles.enter} onPress={() => handleSubmit()}><Text style={styles.enterText}>Login</Text></TouchableHighlight>
-            <TouchableHighlight onPress={() => signInForm()} ><Text style={styles.textThirdColorMtop}>You have an account? Sign In</Text></TouchableHighlight>
+            <TouchableHighlight style={styles.enter} onPress={() => handleSignIn()}><Text style={styles.enterText}>Sign in</Text></TouchableHighlight>
+            <TouchableHighlight onPress={() => signInForm()} ><Text style={styles.textThirdColorMtop}>You have an account? Login</Text></TouchableHighlight>
         </View>
         }
         </>
         }
         
-        </View>
+        </View>*/
     )
 }
 
@@ -217,11 +303,11 @@ const styles = StyleSheet.create({
     },
     userForm:{
         flex:1,
-        marginTop:20,
         paddingVertical:10,
         paddingHorizontal:10,
         alignItems:'center',
         justifyContent:'center',
+        marginTop:80
     },
     formTitle:{
         fontSize:27

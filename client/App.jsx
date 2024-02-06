@@ -1,21 +1,26 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TextInput, View, ScrollView } from 'react-native';
+
+import { StyleSheet, View, ScrollView } from 'react-native';
 //import { Home } from './src/views/home';
 import { Footer } from './src/views/footer';
 import {LayoutsContextProvider}from './context/layoutsContext';
+import { GameContextProvider } from './context/gamesContext';
 import { ViewsContainer } from './src/views/viewsContainer';
+import { AuthContextProvider } from './context/authContext';
+import SearchGames from './src/views/searchGames';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <LayoutsContextProvider>
-        <TextInput style={styles.input} placeholder='Buscar producto'></TextInput>
-        <StatusBar style="auto" />
+    <AuthContextProvider>
+    <LayoutsContextProvider>
+    <GameContextProvider>
         <ScrollView style={styles.footerMargin}>
           <ViewsContainer/>
         </ScrollView>
         <Footer/>
-      </LayoutsContextProvider>
+    </GameContextProvider>
+    </LayoutsContextProvider>
+    </AuthContextProvider>
     </View>
   );
 }
@@ -28,16 +33,6 @@ const styles = StyleSheet.create({
   },
   textColor:{
     color:'#fff',
-  },
-  input:{
-    marginTop:50,
-    width:'90%',
-    height:60,
-    fontSize:20,
-    paddingLeft:10,
-    backgroundColor:'white',
-    borderRadius: 15,
-    fontWeight:'700',
   },
   footerMargin:{
     marginBottom:65

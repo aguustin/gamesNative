@@ -1,8 +1,12 @@
-import { useState, useContext } from "react"
-import {StyleSheet, TouchableOpacity, View, Text, Image } from "react-native"
-import LayoutsContext from "../../context/layoutsContext"
+import { useState, useContext } from "react";
+import {StyleSheet, TouchableOpacity, View, Image } from "react-native";
+import LayoutsContext from "../../context/layoutsContext";
+import GameContext from "../../context/gamesContext";
+import { getAllGames } from '../api/gamesRequest';
 
 export const Footer = () => {
+
+    const [count, setCount] = useState(0);
 
     const { changeHomeImg,
         setChangeHomeImg,
@@ -14,6 +18,8 @@ export const Footer = () => {
         setChangeUserImg,
         setGameInfo} = useContext(LayoutsContext);
 
+        const { setAllGames} = useContext(GameContext);
+
     const setAllImagesF = () => {
         setChangeHomeImg(false);
         setChangeHearthImg(false);
@@ -22,9 +28,17 @@ export const Footer = () => {
         setGameInfo(false);
     }
 
-    const activeHomeImg = () => {
+    const activeHomeImg = async () => {
         setAllImagesF();
         setChangeHomeImg(true);
+        setCount(count + 1);
+
+        if(count == 1){
+            const response =  await getAllGames();
+            setAllGames(response);
+            setCount(0);
+        }
+        
     }
 
     const activeHearthImg = () => {
