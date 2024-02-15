@@ -16,7 +16,11 @@ export const Footer = () => {
         setChangeCartImg,
         changeUserImg,
         setChangeUserImg,
-        setGameInfo} = useContext(LayoutsContext);
+        setGameInfo,
+        setOpenChangeNL,
+        setOpenChangeUsername,
+        setOpenChangePassword,
+        setOpenSeeOG} = useContext(LayoutsContext);
 
         const { setAllGames} = useContext(GameContext);
 
@@ -53,6 +57,10 @@ export const Footer = () => {
 
     const activeUserImg = () => {
         setAllImagesF();
+        setOpenChangeNL(false);
+        setOpenChangeUsername(false);
+        setOpenChangePassword(false);
+        setOpenSeeOG(false);
         setChangeUserImg(true);
     }
 

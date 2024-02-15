@@ -269,3 +269,65 @@ export const purchaseController = async (req, res) => {
         })
     res.sendStatus(200);
 }
+
+
+export const changeProfileController = async (req, res) => {
+    const {userId, } = req.params;
+}
+
+export const changeNLController = async (req, res) => {
+    const {userId, name, lastname} = req.params;
+    
+    await gamesModel.updateOne(
+        {_id: userId},
+        {
+            $set:{
+                name: name,
+                lastname: lastname
+            }
+        }
+    )
+    res.sendStatus(200);
+}
+
+export const changeUsernameController = async (req, res) => {
+    const {userId, username} = req.params;
+    await gamesModel.updateOne(
+        {_id: userId},
+        {
+            $set:{
+                username: username
+            }
+        }
+    )
+    res.sendStatus(200);
+}
+
+export const changePasswordController = async (req, res) => {
+    const {userId, oldPassword, newPassword, confirmNewPassword} = req.params;
+
+    const findPassword = await gamesModel.find({_id: userId, password: oldPassword}); //algo por aca funciona mal (no toma las condiciones y no actualiza)
+
+    console.log(userId, oldPassword, newPassword, confirmNewPassword);
+
+    if(findPassword.lengt > 0) { 
+
+        if(newPassword === confirmNewPassword) {
+        await gamesModel.updateOne(
+            {_id: userId},
+            {
+                $set:{
+                    password: newPassword
+                }
+            }
+        )
+        res.sendStatus(200);
+
+        }else{
+            res.send("The passwords doesn't match");
+        }
+    }else{
+        res.send("the passwords doesn't exists");
+    }
+
+}

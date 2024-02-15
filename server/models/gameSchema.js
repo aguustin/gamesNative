@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 const gameSchema = mongoose.Schema({
     userId:{type: String},
     email:{type: String},
+    name:{type: String},
+    lastname:{type: String},
     username:{type: String},
     password:{type: String},
     games:[{

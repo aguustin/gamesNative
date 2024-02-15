@@ -2,11 +2,24 @@ import { useContext, useState } from "react";
 import { View, Text, Image, StyleSheet, TextInput, TouchableHighlight } from "react-native"
 import LayoutsContext from "../../context/layoutsContext";
 import AuthContext from "../../context/authContext";
+import { ChangeNameLNLayout, ChangePasswordLayout, ChangeUsernameLayout, SeeObtainedGamesLayout } from "./changeInfo";
 
 export const UserInfo = () => {
 
-    const {userExist, setUserExist, registerUser, setRegisterUser} = useContext(LayoutsContext);
+    const {userExist,
+        setUserExist,
+        registerUser,
+        setRegisterUser,
+        openChangeNL,
+        setOpenChangeNL,
+        openChangeUsername,
+        setOpenChangeUsername,
+        openChangePassword,
+        setOpenChangePassword,
+        openSeeOG,
+        setOpenSeeOG} = useContext(LayoutsContext);
     const {signInContext, loginContext} = useContext(AuthContext);
+ 
   
     const [formData, setFormData] = useState({
           email:'',
@@ -37,9 +50,41 @@ export const UserInfo = () => {
             setRegisterUser(false);
         }
 
+        const changeNameLNLayout = () => {
+            setOpenChangeUsername(false);
+            setOpenChangePassword(false);
+            setOpenSeeOG(false);
+            setOpenChangeNL(true);
+        }
+
+        const changeUsernameLayout = () => {
+            setOpenChangePassword(false);
+            setOpenSeeOG(false);
+            setOpenChangeNL(false);
+            setOpenChangeUsername(true);
+        } 
+
+        const changePasswordLayout = () => {
+            setOpenSeeOG(false);
+            setOpenChangeNL(false);
+            setOpenChangeUsername(false);
+            setOpenChangePassword(true);
+        } 
+
+        const seeObtainedGamesLayout = () => {
+            setOpenChangeNL(false);
+            setOpenChangeUsername(false);
+            setOpenChangePassword(false);
+            setOpenSeeOG(true);
+        }  
+
     return(
 
         <View style={styles.userInfoContainer}>
+            {openChangeNL && <ChangeNameLNLayout/>}
+            {openChangeUsername && <ChangeUsernameLayout/>}
+            {openChangePassword && <ChangePasswordLayout/>}
+            {openSeeOG && <SeeObtainedGamesLayout/> }
             <>
             <View style={styles.userProfile}>
                 <View>
@@ -56,38 +101,46 @@ export const UserInfo = () => {
             </View>
             <View style={[styles.userProfileRows]}>
                 <Image style={styles.mLeft} source={require('../../assets/userInfoIcons/happiness.png')}/>
+                <TouchableHighlight onPress={() => changeNameLNLayout()}>
                 <View>
                     <Text style={[styles.fontStyleUser, styles.mLeft]}>Change name and lastname</Text>
                     <Text style={[styles.secondFontUser, styles.mLeft]}>Change the name of your acount</Text>
                 </View>
+                </TouchableHighlight>
             </View>
-            <View style={[styles.userProfileRows]}>
+            {/*<View style={[styles.userProfileRows]}>
                 <Image style={styles.mLeft} source={require('../../assets/userInfoIcons/arroba.png')}/>
-                <View>
+                <TouchableHighlight onPress={() => change}>
                     <Text style={[styles.fontStyleUser, styles.mLeft]}>Change email</Text>
                     <Text style={[styles.secondFontUser, styles.mLeft]}>Change the email of your acount</Text>
-                </View>
-            </View>
+                </TouchableHighlight>
+            </View>*/}
             <View style={[styles.userProfileRows]}>
                 <Image style={styles.mLeft} source={require('../../assets/userInfoIcons/driver-license.png')}/>
-                <View>
-                    <Text style={[styles.fontStyleUser, styles.mLeft]}>Change the username</Text>
-                    <Text style={[styles.secondFontUser, styles.mLeft]}>Change the username of your acount</Text>
-                </View>
+                <TouchableHighlight onPress={() => changeUsernameLayout()}>
+                    <View>
+                        <Text style={[styles.fontStyleUser, styles.mLeft]}>Change the username</Text>
+                        <Text style={[styles.secondFontUser, styles.mLeft]}>Change the username of your acount</Text>
+                    </View>
+                </TouchableHighlight>
             </View>
             <View style={[styles.userProfileRows]}>
                 <Image style={styles.mLeft} source={require('../../assets/userInfoIcons/key.png')}/>
-                <View>
-                    <Text style={[styles.fontStyleUser, styles.mLeft]}>Change password</Text>
-                    <Text style={[styles.secondFontUser, styles.mLeft]}>Change the password of your count</Text>
-                </View>
+                <TouchableHighlight onPress={() => changePasswordLayout()}>
+                    <View>
+                        <Text style={[styles.fontStyleUser, styles.mLeft]}>Change password</Text>
+                        <Text style={[styles.secondFontUser, styles.mLeft]}>Change the password of your count</Text>
+                    </View>
+                </TouchableHighlight>
             </View>
             <View style={[styles.userProfileRows]}>
                 <Image style={styles.mLeft} source={require('../../assets/userInfoIcons/shopping.png')}/>
+                <TouchableHighlight onPress={() => seeObtainedGamesLayout()}>
                 <View>
                     <Text style={[styles.fontStyleUser, styles.mLeft]}>Check the games</Text>
                     <Text style={[styles.secondFontUser, styles.mLeft]}>Check the games in your acount</Text>
                 </View>
+                </TouchableHighlight>
             </View>
             </>
             </View>

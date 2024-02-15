@@ -12,6 +12,10 @@ export const LayoutsContextProvider = ({children}) => {
     const [gameInfo, setGameInfo] = useState(false);
     const [gameLike, setGameLike] = useState(false);
     const [search, setSearch] = useState('');
+    const [openChangeNL, setOpenChangeNL] = useState(false);
+    const [openChangeUsername, setOpenChangeUsername] = useState(false);
+    const [openChangePassword, setOpenChangePassword] = useState(false);
+    const [openSeeOG, setOpenSeeOG] = useState(false);
     return(
         <LayoutsContext.Provider value={{
             userExist,
@@ -31,7 +35,15 @@ export const LayoutsContextProvider = ({children}) => {
             gameLike,
             setGameLike,
             search, 
-            setSearch
+            setSearch,
+            openChangeNL,
+            setOpenChangeNL,
+            openChangeUsername,
+            setOpenChangeUsername,
+            openChangePassword,
+            setOpenChangePassword,
+            openSeeOG,
+            setOpenSeeOG
         }}>{children}</LayoutsContext.Provider>
     )
 }

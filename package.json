@@ -21,17 +21,18 @@
   "homepage": "https://github.com/aguustin/gamesNative#readme",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "cloudinary": "^2.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
+    "json-server": "^0.16.1",
     "mongoose": "^7.6.3",
     "morgan": "^1.10.0",
+    "ngrok": "^4.0.1",
     "passport": "^0.6.0",
     "passport-google-oauth": "^2.0.0",
-    "passport-local": "^1.0.0",
-    "json-server": "^0.16.1",
-    "ngrok": "^4.0.1"
+    "passport-local": "^1.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
