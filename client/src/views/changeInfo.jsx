@@ -1,6 +1,41 @@
 import { useContext, useState } from "react";
 import { View, Image, Text, TextInput, StyleSheet, TouchableHighlight } from "react-native";
 import AuthContext from "../../context/authContext";
+import LayoutsContext from "../../context/layoutsContext";
+import * as DocumentPicker from "expo-document-picker";
+import * as ExpoFileSystem from 'expo-file-system'; // ver estooooooooooooooooooooooooooooooooooooo
+
+export const ChangeProfileLayout = () => {
+
+    const {userData, changeProfileContext} = useContext(AuthContext);
+    const {setOpenChangeProfile} = useContext(LayoutsContext);
+    const [filePicked, setFilePicked] = useState([]);
+    const [formData, setFormData] = useState({
+        file: 'file'
+    })
+
+    const changeProfile = async () => {
+            const files = await DocumentPicker.getDocumentAsync({type: '*/*'});
+            setFilePicked(files);
+            const changeForm = {
+                userId: userData[0]._id, 
+                fileUri: files.assets[0]?.uri
+            }
+            changeProfileContext(changeForm);
+    }
+
+    return(
+        <View style={styles.changeProfileContainer}>
+            <TouchableHighlight onPress={() => setOpenChangeProfile(false)}><Image source={require('../../assets/goback.png')}/></TouchableHighlight>
+            <View>
+                <View style={styles.imageProfile}> 
+                    {filePicked.length !== 0 ? <Image source={{uri:filePicked.assets[0]?.uri}}></Image> : <Image source={require('../../assets/user.png')}></Image>}
+                    <TouchableHighlight style={styles.uploadProfile} title="Select photo" onPress={async () => { changeProfile() }}><Text>Select photo</Text></TouchableHighlight>
+                </View>
+            </View>
+        </View>
+    )
+}
 
 export const ChangeNameLNLayout = () => {
 
@@ -13,11 +48,6 @@ export const ChangeNameLNLayout = () => {
 
     handleInputChange = (fieldName, value) => {
         setFormData({...formData, [fieldName]: value });
-    }
-
-    
-    const changeProfile = (formData) => {
-        changeProfileContext (formData);
     }
     
     const changeNL = () => {
@@ -173,6 +203,15 @@ export const SeeObtainedGamesLayout = () => {
 }
 
 const styles = StyleSheet.create({
+    changeProfileContainer:{
+        flexDirection: 'column',
+        flex: 1,
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign:'center'
+    },
     changeSection:{
         position:'absolute',
         flex:1,

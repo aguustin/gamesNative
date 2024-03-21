@@ -7,6 +7,7 @@ const gameSchema = mongoose.Schema({
     lastname:{type: String},
     username:{type: String},
     password:{type: String},
+    profileImg:{type: String},
     games:[{
         obtained:[{
             gameId:{type:Number},

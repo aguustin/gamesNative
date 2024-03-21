@@ -12,6 +12,7 @@ export const LayoutsContextProvider = ({children}) => {
     const [gameInfo, setGameInfo] = useState(false);
     const [gameLike, setGameLike] = useState(false);
     const [search, setSearch] = useState('');
+    const [openChangeProfile, setOpenChangeProfile] = useState(false);
     const [openChangeNL, setOpenChangeNL] = useState(false);
     const [openChangeUsername, setOpenChangeUsername] = useState(false);
     const [openChangePassword, setOpenChangePassword] = useState(false);
@@ -36,6 +37,8 @@ export const LayoutsContextProvider = ({children}) => {
             setGameLike,
             search, 
             setSearch,
+            openChangeProfile, 
+            setOpenChangeProfile,
             openChangeNL,
             setOpenChangeNL,
             openChangeUsername,

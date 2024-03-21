@@ -25,13 +25,15 @@ export const Home = () => {
       setAllGames(response);
       setSearchingGames(response);
       //getSessionContext();
-      const res = await getUserDataRequest("65b844cbf0717a7345825c1d");
-      setUserData(res.data);
+     if(session){ 
+      console.log("is", session)
+        //const res = await getUserDataRequest(session[0]._id);
+        //setUserData(res.data);
+      }
+
   } 
   res();
  }, []);
-
- console.log("userData: ", userData);
 
  const firstPage = async () => {
     setPageCount([1, 2, 3]);
@@ -70,7 +72,6 @@ export const Home = () => {
     setPageCount(updatePages);
   }
   if(pageFlag === false){
-    console.log("eereraer");
     setPageFlag(true);
     setFirstGame(firstGame + 20);
     setLastGame(lastGame + 20);
@@ -94,7 +95,6 @@ export const Home = () => {
     }
   }
   
-  console.log("first: ", firstGame, " ", "last: ", lastGame);
   const gameCategory = async (category) => {
       await getGamesByCategoriesContext(category);
   }
@@ -108,7 +108,7 @@ export const Home = () => {
   const addGameToLikedGames = (gameId, title, thumbnail, release_date, gamePrice, gameDiscount) => {
     
     const favoriteGameData = {
-      id : "65b844cbf0717a7345825c1d",/*userData[0]?._id*/
+      id : session[0]._id,/*userData[0]?._id*/
       gameId: gameId,
       title: title,
       thumbnail: thumbnail,
@@ -120,9 +120,9 @@ export const Home = () => {
   }
 
   const addGameToCart = ( gameId, title, thumbnail, release_date, gamePrice, gameDiscount) => {
-    console.log(gameId);
+
     const cartGameData = {
-      sessionId: "65b844cbf0717a7345825c1d" /*userData[0]?._id*/,
+      sessionId: session[0]._id /*userData[0]?._id*/,
       gameId: gameId,
       title: title,
       thumbnail: thumbnail,

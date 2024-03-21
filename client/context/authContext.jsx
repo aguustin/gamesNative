@@ -5,31 +5,29 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const AuthContext = createContext();
 
 export const AuthContextProvider = ({children}) => {
-    const [session, setSession] = useState([]);
+    const [session, setSession] = useState('');
     const [userData, setUserData] = useState([]);
     let a;
-    /*useEffect(() => {
+    useEffect(() => {
         (async () => {
-        await setSession(AsyncStorage.getItem('user'));
-        await setSession(JSON.stringify(session).replace(/[\\"]/g,""));
-        console.log("asdasdad");
-        console.log("asdasdad");
-    })()
-    }, [])*/
+            const jsonSession = await AsyncStorage.getItem('user');
+            await setSession(JSON.parse(jsonSession));
+        })()
+    }, [])
     
-    console.log("session: ", session);
     const signInContext = async (formData) => {
         await signInRequest(formData);
     }
 
     const loginContext = async (formData) => {
         const res = await loginRequest(formData);
-        AsyncStorage.setItem('user', res.data);
+        await AsyncStorage.setItem('user', res.data);
         setSession(res.data);
     }
 
-    const changeProfileContext = async (formData) => {
-        const res = await changeProfileRequest(formData);
+    const changeProfileContext = async (changeForm) => {
+        console.log("diform: ", changeForm);
+        const res = await changeProfileRequest(changeForm);
         //setUserData(res.data);
     }
 
@@ -49,7 +47,8 @@ export const AuthContextProvider = ({children}) => {
     }
 
     return(
-        <AuthContext.Provider value={{session, 
+        <AuthContext.Provider value={{
+        session, 
         setSession, 
         userData, 
         setUserData, 

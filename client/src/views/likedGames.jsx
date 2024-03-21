@@ -4,17 +4,19 @@ import GameContext from '../../context/gamesContext';
 import AuthContext from '../../context/authContext';
 
 const LikedGames = () => {
-    const {userData} = useContext(AuthContext);
+    const {session, userData} = useContext(AuthContext);
     const {addToCartContext, deleteFavGameContext} = useContext(GameContext);
     const [a, setA] = useState(true);
-
     const deleteFavGame = (sessionId, gameId) => {
         deleteFavGameContext(sessionId, gameId);
     }
 
     const addToCart = (sessionId, gameId) => {
+        console.log(sessionId, gameId);
         addToCartContext(sessionId, gameId);
     }
+
+    console.log("userdata: ", userData)
     return(
         <>
         <View style={styles.sectionTitle}>
@@ -26,7 +28,7 @@ const LikedGames = () => {
         fav.onCartorFavorite.map((f) => 
         f.favorite === true &&
         <View key={f._id} style={styles.likedGameContainer}>
-        <TouchableOpacity style={styles.delete} onPress={() => deleteFavGame("65b844cbf0717a7345825c1d",f._id)}><Image source={require('../../assets/remove.png')}></Image></TouchableOpacity>
+        <TouchableOpacity style={styles.delete} onPress={() => deleteFavGame(session[0]._id, f._id)}><Image source={require('../../assets/remove.png')}></Image></TouchableOpacity>
             <Image style={styles.likedGameImg} source={{uri: f.thumbnail}}></Image>
             <Text style={styles.titleGame}>{f.title}</Text>
             <View style={styles.likedGameInfo}>
@@ -36,7 +38,7 @@ const LikedGames = () => {
                 <Text style={[styles.textPrimaryColor]}>{f.total}$</Text>
               </View>
               <View style={styles.addCartStyle}>
-                <TouchableOpacity onPress={() => addToCart("65b844cbf0717a7345825c1d", f._id)}><Image source={require('../../assets/add.png')}></Image></TouchableOpacity>
+                <TouchableOpacity onPress={() => addToCart(session[0]._id, f._id)}><Image source={require('../../assets/add.png')}></Image></TouchableOpacity>
                 <Image source={require('../../assets/footer/cartActive.png')}></Image>
               </View>
             </View>

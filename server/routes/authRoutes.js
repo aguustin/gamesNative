@@ -9,7 +9,7 @@ router.post('/login', loginController);
 
 router.get('/allUsers', checkHttpRequest);
 
-router.put('/change-profile', changeProfileController);
+router.put('/change-profile/:userId/:fileUri', changeProfileController);
 
 router.put('/change-nl/:userId/:name/:lastname', changeNLController);
 

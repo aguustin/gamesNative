@@ -4,11 +4,17 @@ import GameContext from "../../context/gamesContext";
 import AuthContext from "../../context/authContext";
 
 const GamesOnCart = () => {
-    const {userData} = useContext(AuthContext);
+    const {session, userData} = useContext(AuthContext);
     const {deleteFavGameContext, purchaseAllContext} = useContext(GameContext);
     const [openPurchase, setOpenPurchase] = useState(false);
     const [purchaseFlag, setPurchaseFlag] = useState(false);
-    const [totalOnCart, setTotalOnCart] = useState([]);
+    let tt;
+    let innermostKey;
+    let doubleNestedObject;
+    let innerKey;
+    let finalObject;
+    let a;
+    let totalPurchase;
 
     const [purchaseData, setPurchaseData] = useState({
         cardNumber:'',
@@ -31,7 +37,7 @@ const GamesOnCart = () => {
 
     const purchaseGames = () => {
         const purchaseObj = {
-            userId:"65b844cbf0717a7345825c1d" /*userData[0]._id*/,
+            userId:session[0]._id /*userData[0]._id*/,
             cardNumber:purchaseData.cardNumber,
             securityNumber:purchaseData.securityNumber,
             purchaseFlag: purchaseFlag,
@@ -40,14 +46,16 @@ const GamesOnCart = () => {
         purchaseAllContext(purchaseObj);
     }
     let p = 0;
-    const tt = userData.map((onCart) => onCart.games.map((game) => game.onCartorFavorite.map((t) => t.favorite === false && (p += t.total))))
-    
-    const innermostKey = Object.keys(tt)[0];
-    const doubleNestedObject = tt[innermostKey];
-    const innerKey = Object.keys(doubleNestedObject)[0];
-    const finalObject = doubleNestedObject[innerKey];
-    const a = (finalObject.map(key => Math.round(key)));
-    const totalPurchase = Math.max(...a);
+    console.log("UUUSER", userData)
+    if(userData > 0){
+        tt = userData.map((onCart) => onCart.games.map((game) => game.onCartorFavorite.map((t) => t.favorite === false && (p += t.total))))
+        innermostKey = Object.keys(tt)[0];
+        doubleNestedObject = tt[innermostKey];
+        innerKey = Object.keys(doubleNestedObject)[0];
+        finalObject = doubleNestedObject[innerKey];
+        a = (finalObject.map(key => Math.round(key)));
+        totalPurchase = Math.max(...a);
+    }
    
     return(
         <View>
@@ -69,7 +77,7 @@ const GamesOnCart = () => {
                             <Text style={{color:'#ffffff', fontSize:18, marginTop:20, marginLeft:10,}}>Price: <Text style={{color:'#017511'}}>${cart?.total}</Text></Text>
                         </View>
                     </View>
-                    <TouchableHighlight onPress={() => deleteOnCart("65b844cbf0717a7345825c1d", cart._id)}><Image style={styles.x} source={require('../../assets/gameInfoIcons/x.png')}></Image></TouchableHighlight>
+                    <TouchableHighlight onPress={() => deleteOnCart(session[0]._id, cart._id)}><Image style={styles.x} source={require('../../assets/gameInfoIcons/x.png')}></Image></TouchableHighlight>
                 </View>
             </View>)))}
             {totalPurchase > 0 && <View style={styles.totalPurchaseView}><Text style={styles.totalPurchase}>Your total on cart is: ${totalPurchase}</Text></View>}

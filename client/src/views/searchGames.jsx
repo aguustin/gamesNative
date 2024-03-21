@@ -23,7 +23,6 @@ const SearchGames = () => {
         setSearch('');
       }
 
-    console.log("searching games: ", searchingGames);
     return(
         <>
             <TextInput style={styles.input}  

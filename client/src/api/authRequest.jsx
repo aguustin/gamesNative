@@ -11,7 +11,7 @@ export const signInRequest = async (formData) => await axios.post('http://192.16
 
 export const loginRequest = async (formData) => axios.post('http://192.168.100.10:4000/login', formData);
 
-export const changeProfileRequest = async (userId, formData) => axios.put(`http://192.168.100.10:4000/change-profile/`);
+export const changeProfileRequest = async (changeForm) => axios.put(`http://192.168.100.10:4000/change-profile/${changeForm.userId}/${changeForm.fileUri}`);
 
 export const changeNLRequest = async (userId, formData) => axios.put(`http://192.168.100.10:4000/change-nl/${userId}/${formData.name}/${formData.lastname}`);
 
